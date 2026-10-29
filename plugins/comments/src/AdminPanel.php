@@ -72,7 +72,7 @@ final class AdminPanel
                                     <button type="submit">Spam</button>
                                 </form>
                                 <?php endif; ?>
-                                <form method="post" action="" style="display:inline" onsubmit="return confirm('Delete?')">
+                                <form method="post" action="" style="display:inline" data-confirm="Delete?">
                                     <input type="hidden" name="wawoo_action" value="comment_moderate">
                                     <input type="hidden" name="post_slug" value="<?= htmlspecialchars($slug) ?>">
                                     <input type="hidden" name="comment_id" value="<?= htmlspecialchars($id) ?>">

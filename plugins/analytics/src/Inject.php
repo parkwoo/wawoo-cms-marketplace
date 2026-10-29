@@ -12,10 +12,11 @@ class Inject
             return;
         }
         $id = htmlspecialchars(GA_TRACKING_ID, ENT_QUOTES, 'UTF-8');
+        $cspAttr = \Wawoo\Core\Csp::attr();
         echo <<<HTML
 <!-- wawoo-cms:analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id={$id}"></script>
-<script>
+<script{$cspAttr} async src="https://www.googletagmanager.com/gtag/js?id={$id}"></script>
+<script{$cspAttr}>
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());

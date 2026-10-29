@@ -93,7 +93,7 @@ final class Assets
             . $bgRule
             . 'border:0;overflow-x:auto;margin:2em 0;}'
             . 'pre.mermaid-host svg{max-width:100%;height:auto;display:block;margin-inline:auto;}</style>' . "\n";
-        echo '<script>'
+        echo '<script' . \Wawoo\Core\Csp::attr() . '>'
             . '(function(){'
             . 'var nodes=document.querySelectorAll(".post-content code.language-mermaid, article code.language-mermaid, .post-content pre > code.language-mermaid");'
             . 'if(!nodes.length){return;}'

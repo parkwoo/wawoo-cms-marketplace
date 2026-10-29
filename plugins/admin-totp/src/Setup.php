@@ -54,7 +54,7 @@ final class Setup
             self::requirePost($method);
             self::requireCsrf();
             Store::enableTotp(); // fresh secret + fresh backup codes
-            $_SESSION['wawoo_admin_new_codes'] = Store::load()['backup_codes'] ?? [];
+            $_SESSION['wawoo_admin_new_codes'] = Store::backupCodes();
             header('Location: ' . $self . '?action=totp');
             exit;
         }
@@ -90,7 +90,7 @@ final class Setup
                 Store::enableTotp($pending);
                 unset($_SESSION['wawoo_totp_pending']);
                 $_SESSION['wawoo_admin_totp_ok'] = true;
-                $_SESSION['wawoo_admin_new_codes'] = Store::load()['backup_codes'] ?? [];
+                $_SESSION['wawoo_admin_new_codes'] = Store::backupCodes();
                 header('Location: ' . $self . '?action=totp');
                 exit;
             }
@@ -145,7 +145,7 @@ final class Setup
         if (is_array($newCodes)) {
             $codes = $newCodes;
         } else {
-            $codes = Store::load()['backup_codes'] ?? [];
+            $codes = Store::backupCodes();
         }
         $uri = Totp::provisioningUri($secret, 'admin', $issuer, (int)$cfg['totp_period'], (int)$cfg['totp_digits']);
         $qr  = Totp::qrDataUri($uri, 160);
@@ -177,11 +177,11 @@ final class Setup
                         <?php endforeach; ?>
                     </ul>
                 <?php endif; ?>
-                <form method="post" action="<?= htmlspecialchars($self) ?>?action=totp-disable" style="display:inline" onsubmit="return confirm('Disable 2FA?')">
+                <form method="post" action="<?= htmlspecialchars($self) ?>?action=totp-disable" style="display:inline" data-confirm="Disable 2FA?">
                     <?= Csrf::field() ?>
                     <button type="submit">Disable 2FA</button>
                 </form>
-                <form method="post" action="<?= htmlspecialchars($self) ?>?action=totp-regen" style="display:inline" onsubmit="return confirm('Generate a new secret and backup codes? Your current authenticator entry will stop working.')">
+                <form method="post" action="<?= htmlspecialchars($self) ?>?action=totp-regen" style="display:inline" data-confirm="Generate a new secret and backup codes? Your current authenticator entry will stop working.">
                     <?= Csrf::field() ?>
                     <button type="submit">Regenerate secret &amp; backup codes</button>
                 </form>

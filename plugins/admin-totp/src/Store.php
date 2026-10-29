@@ -44,8 +44,10 @@ final class Store
 
     public static function hasSecret(): bool
     {
-        $s = self::load();
-        return !empty($s['totp_secret']);
+        // Require a *decryptable* secret: if the encryption key is lost the
+        // stored secret cannot be verified, so treat 2FA as unset rather than
+        // locking the operator out (they re-enrol after regaining access).
+        return self::getSecret() !== null;
     }
 
     /**
@@ -58,7 +60,7 @@ final class Store
         $codes = self::generateBackupCodes();
         self::save([
             'totp_secret'  => Crypto::seal($secret),
-            'backup_codes' => $codes,
+            'backup_codes' => Crypto::seal(json_encode(array_values($codes))),
             'enabled_at'   => time(),
         ]);
         return $secret;
@@ -78,15 +80,31 @@ final class Store
         return isset($s['totp_secret']) ? Crypto::open((string)$s['totp_secret']) : null;
     }
 
-    public static function consumeBackupCode(string $code): bool
+    /** Decoded backup codes (sealed at rest; tolerates legacy plaintext arrays). */
+    public static function backupCodes(): array
+    {
+        $raw = self::load()['backup_codes'] ?? null;
+        if (is_array($raw)) {
+            return $raw; // legacy plaintext
+        }
+        $codes = $raw !== null ? json_decode((string)Crypto::open((string)$raw), true) : null;
+        return is_array($codes) ? $codes : [];
+    }
+
+    public static function setBackupCodes(array $codes): void
     {
         $s = self::load();
-        $codes = $s['backup_codes'] ?? [];
+        $s['backup_codes'] = Crypto::seal(json_encode(array_values($codes)));
+        self::save($s);
+    }
+
+    public static function consumeBackupCode(string $code): bool
+    {
+        $codes = self::backupCodes();
         foreach ($codes as $i => $c) {
-            if (hash_equals($c, strtoupper(trim($code)))) {
+            if (hash_equals((string)$c, strtoupper(trim($code)))) {
                 unset($codes[$i]);
-                $s['backup_codes'] = array_values($codes);
-                self::save($s);
+                self::setBackupCodes(array_values($codes));
                 return true;
             }
         }
@@ -95,7 +113,7 @@ final class Store
 
     public static function remainingBackupCodes(): int
     {
-        return count(self::load()['backup_codes'] ?? []);
+        return count(self::backupCodes());
     }
 
     // ---- rate limiting ----

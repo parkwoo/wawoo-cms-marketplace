@@ -189,6 +189,6 @@ $siteUrl = defined('BASE_URL') ? BASE_URL : '/';
     <?php Hook::fire('theme.admin.after', $vars ?? []); ?>
     </main>
 </div>
-<script><?= $js ?></script>
+<script<?= \Wawoo\Core\Csp::attr() ?>><?= $js ?></script>
 </body>
 </html>

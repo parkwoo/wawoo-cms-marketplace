@@ -2,6 +2,8 @@
 
 namespace Wawoo\Plugin\Translation;
 
+use Wawoo\Core\Csp;
+
 class MultiLanguageManager
 {
     // 言語設定
@@ -267,7 +269,7 @@ class MultiLanguageManager
     public function generateLanguageSwitcher(string $currentLanguage, string $currentUrl): string
     {
         $html = '<div class="language-switcher">';
-        $html .= '<select id="language-select" onchange="switchLanguage(this.value)">';
+        $html .= '<select id="language-select">';
         
         foreach (self::$supportedLanguages as $code => $info) {
             $selected = $code === $currentLanguage ? 'selected' : '';
@@ -281,12 +283,13 @@ class MultiLanguageManager
         }
         
         $html .= '</select>';
-        $html .= '<script>';
+        $html .= '<script' . Csp::attr() . '>';
         $html .= 'function switchLanguage(lang) {';
         $html .= '    const url = new URL(window.location.href);';
         $html .= '    url.searchParams.set("lang", lang);';
         $html .= '    window.location.href = url.toString();';
         $html .= '}';
+        $html .= 'document.getElementById("language-select").addEventListener("change",function(){switchLanguage(this.value);});';
         $html .= '</script>';
         $html .= '</div>';
         

@@ -28,12 +28,13 @@ final class Switcher
             }
             echo '<input type="hidden" name="' . htmlspecialchars((string)$k) . '" value="' . htmlspecialchars((string)$v) . '">';
         }
-        echo '<select name="' . htmlspecialchars($param) . '" onchange="this.form.submit()" style="font-size:.85rem;padding:.25rem .5rem;border-radius:8px">';
+        echo '<select name="' . htmlspecialchars($param) . '" class="wawoo-lang-select" style="font-size:.85rem;padding:.25rem .5rem;border-radius:8px">';
         foreach ($supported as $code) {
             $code = (string)$code;
             $sel  = $code === $current ? ' selected' : '';
             echo '<option value="' . htmlspecialchars($code) . '"' . $sel . '>' . htmlspecialchars(strtoupper($code)) . '</option>';
         }
         echo '</select></form>';
+        echo '<script' . \Wawoo\Core\Csp::attr() . '>document.querySelectorAll(".wawoo-lang-select").forEach(function(s){s.addEventListener("change",function(){this.form.submit();});});</script>';
     }
 }

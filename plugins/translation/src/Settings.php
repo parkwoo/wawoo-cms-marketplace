@@ -179,9 +179,9 @@ class Settings
                 <h1>翻訳プラグイン設定</h1>
                 
                 <div class="tabs">
-                    <div class="tab active" onclick="showTab('basic')">基本設定</div>
-                    <div class="tab" onclick="showTab('advanced')">高度な設定</div>
-                    <div class="tab" onclick="showTab('custom')">カスタムプロンプト</div>
+                    <div class="tab active" data-tab="basic">基本設定</div>
+                    <div class="tab" data-tab="advanced">高度な設定</div>
+                    <div class="tab" data-tab="custom">カスタムプロンプト</div>
                 </div>
                 
                 <?php if (isset($_SESSION['message'])): ?>
@@ -226,7 +226,7 @@ class Settings
                             
                             <div class="form-group">
                                 <label for="provider">APIプロバイダ</label>
-                                <select name="provider" id="provider" onchange="updateModelOptions()">
+                                <select name="provider" id="provider">
                                     <option value="openai" <?php echo $config['provider'] === 'openai' ? 'selected' : ''; ?>>OpenAI</option>
                                     <option value="anthropic" <?php echo $config['provider'] === 'anthropic' ? 'selected' : ''; ?>>Anthropic</option>
                                 </select>
@@ -326,13 +326,13 @@ class Settings
                     </div>
                     
                     <button type="submit">設定を保存</button>
-                    <button type="button" class="secondary" onclick="testConnection()">接続テスト</button>
-                    <button type="button" class="secondary" onclick="exportConfig()">設定をエクスポート</button>
-                    <button type="button" class="secondary" onclick="importConfig()">設定をインポート</button>
+                    <button type="button" class="secondary" data-action="test-connection">接続テスト</button>
+                    <button type="button" class="secondary" data-action="export">設定をエクスポート</button>
+                    <button type="button" class="secondary" data-action="import">設定をインポート</button>
                 </form>
             </div>
             
-            <script>
+            <script<?= \Wawoo\Core\Csp::attr() ?>>
                 function showTab(tabName) {
                     var tabs = document.querySelectorAll('.tab');
                     var contents = document.querySelectorAll('.tab-content');
@@ -340,7 +340,7 @@ class Settings
                     tabs.forEach(tab => tab.classList.remove('active'));
                     contents.forEach(content => content.classList.remove('active'));
                     
-                    document.querySelector('.tab[onclick="showTab(\'' + tabName + '\')"]').classList.add('active');
+                    document.querySelector('.tab[data-tab="' + tabName + '"]').classList.add('active');
                     document.getElementById(tabName).classList.add('active');
                 }
                 
@@ -456,6 +456,17 @@ class Settings
                     
                     input.click();
                 }
+
+                // CSP: bind handlers instead of inline onclick/onchange.
+                document.querySelectorAll('.tab').forEach(function (t) {
+                    t.addEventListener('click', function () { showTab(t.getAttribute('data-tab')); });
+                });
+                var providerEl = document.getElementById('provider');
+                if (providerEl) { providerEl.addEventListener('change', updateModelOptions); }
+                var actions = { 'test-connection': testConnection, 'export': exportConfig, 'import': importConfig };
+                document.querySelectorAll('[data-action]').forEach(function (b) {
+                    b.addEventListener('click', function () { var fn = actions[b.getAttribute('data-action')]; if (fn) { fn(); } });
+                });
             </script>
         </body>
         </html>

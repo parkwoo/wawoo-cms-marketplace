@@ -47,7 +47,7 @@ final class Enhance
                 $integrityAttr = $hlIntegrity !== ''
                     ? 's.integrity=' . json_encode($hlIntegrity) . ';s.crossOrigin="anonymous";'
                     : '';
-                echo '<script>'
+                echo '<script' . \Wawoo\Core\Csp::attr() . '>'
                     . '(function(){'
                     . 'var els=[].slice.call(document.querySelectorAll(".post-content pre code[class*=language-]:not(.language-mermaid), article pre code[class*=language-]:not(.language-mermaid)"));'
                     . 'if(!els.length){return;}'
@@ -115,7 +115,7 @@ final class Enhance
             . '.post-content th,article th{background:' . $pillBg . '!important;color:' . $pillTxt . '!important;}'
             . '</style>' . "\n";
 
-        echo '<script>'
+        echo '<script' . \Wawoo\Core\Csp::attr() . '>'
             . '(function(){'
             . 'var copy=' . json_encode($copy) . ';'
             . 'var copyLabel=' . json_encode($label) . ';'
