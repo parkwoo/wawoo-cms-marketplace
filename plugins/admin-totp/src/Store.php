@@ -215,7 +215,7 @@ final class Store
         $n = (int)Config::all()['backup_codes'];
         $out = [];
         for ($i = 0; $i < $n; $i++) {
-            $out[] = strtoupper(bin2hex(random_bytes(4))); // 8 hex chars
+            $out[] = strtoupper(bin2hex(random_bytes(5))); // 10 hex chars
         }
         return $out;
     }

@@ -187,6 +187,7 @@ final class Setup
                 </form>
             <?php endif; ?>
             <p style="margin-top:1rem"><a href="<?= htmlspecialchars($self) ?>">&larr; Back to dashboard</a></p>
+            <script<?= \Wawoo\Core\Csp::attr() ?>>document.querySelectorAll('form[data-confirm]').forEach(function(f){f.addEventListener('submit',function(e){if(!confirm(f.getAttribute('data-confirm')))e.preventDefault();});});</script>
         </div>
         <?php
     }

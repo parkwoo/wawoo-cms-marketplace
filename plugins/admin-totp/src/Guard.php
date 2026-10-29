@@ -61,6 +61,12 @@ final class Guard
         $isAuthed = !empty($_SESSION['wawoo_admin_authed']);
         $totpOk   = !empty($_SESSION['wawoo_admin_totp_ok']);
 
+        // Warn (server log) when a stored secret exists but cannot be decrypted
+        // (missing/rotated WAWOO_SECRET_KEY): the second factor is skipped.
+        if (!empty(Store::load()['totp_secret']) && Store::getSecret() === null) {
+            error_log('wawoo admin-totp: stored TOTP secret is not decryptable; second factor disabled until re-enrolled.');
+        }
+
         if (!$isAuthed) {
             self::renderPasswordPrompt($cfg);
             exit;
