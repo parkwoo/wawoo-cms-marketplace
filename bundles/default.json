@@ -1,5 +1,5 @@
 {
   "name": "default",
-  "description": "Classic wawoo-cms starter set: admin, RSS, search, SEO, menus, contact.",
-  "plugins": ["admin", "rss", "search", "seo", "menu", "contact"]
+  "description": "Classic wawoo-cms extras: admin console, RSS feed and search. (seo, menu and contact ship in core.)",
+  "plugins": ["admin", "rss", "search"]
 }

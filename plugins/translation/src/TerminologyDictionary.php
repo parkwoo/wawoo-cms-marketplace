@@ -50,7 +50,7 @@ class TerminologyDictionary
             'style_guide_file' => 'cache/translation/terminology/style_guide.json'
         ], $config);
 
-        $this->cache = new CacheManager();
+        $this->cache = CacheManager::getInstance();
         $this->storage = new TerminologyStorage();
         $this->ensureDirectories();
     }

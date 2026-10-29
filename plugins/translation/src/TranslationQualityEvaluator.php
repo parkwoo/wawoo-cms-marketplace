@@ -58,7 +58,7 @@ class TranslationQualityEvaluator
             'enable_consistency_check' => true
         ], $config);
 
-        $this->cache = new CacheManager();
+        $this->cache = CacheManager::getInstance();
         $this->terminology = TerminologyDictionary::getInstance();
         $this->spellingChecker = new SpellingChecker();
         $this->ensureDirectories();

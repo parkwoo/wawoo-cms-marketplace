@@ -24,21 +24,31 @@ Plugins whose source lives in their own repository are referenced from
 
 ## Install an item
 
-Until `bin/wawoo plugin:install` lands in the core, install by hand:
+From a wawoo-cms checkout, with this repo as a sibling
+(`../wawoo-cms-marketplace`) or via `--index <path>`:
 
 ```bash
-# hosted item
+php bin/wawoo plugin:search rss
+php bin/wawoo plugin:install rss --enable     # hosted: copied; git: cloned
+php bin/wawoo bundle:install default          # a curated set (bundles/default.json)
+```
+
+Or install by hand by `plugin:link`-ing a checkout:
+
+```bash
 git clone https://github.com/parkwoo/wawoo-cms-marketplace
 cd /path/to/wawoo-cms
 php bin/wawoo plugin:link /path/to/wawoo-cms-marketplace/plugins/admin
-
-# git item (own repo)
-git clone https://github.com/parkwoo/wawoo-plugin-comments
-php bin/wawoo plugin:link /path/to/wawoo-plugin-comments
 ```
 
 Then add the name to `ENABLED_PLUGINS` in `config.local.php`, or run
 `php bin/wawoo enable <name>` / `disable <name>`, or use `/admin → Plugins`.
+
+Validate the catalog after editing `index.json`:
+
+```bash
+python3 scripts/validate_index.py
+```
 
 ## Compatibility
 

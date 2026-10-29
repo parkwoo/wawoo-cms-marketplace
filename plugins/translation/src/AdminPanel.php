@@ -32,7 +32,7 @@ class AdminPanel
     {
         $this->plugin = new Plugin();
         $this->config = new ConfigManager();
-        $this->cache = new CacheManager();
+        $this->cache = CacheManager::getInstance();
         $this->logger = new Logger();
         $this->sessionManager = SessionManager::getInstance();
         $this->csrfTokenManager = new CSRFTokenManager();

@@ -63,7 +63,7 @@ class MultiLanguageManager
         ], $config);
 
         $this->translator = new Translator();
-        $this->cache = new CacheManager();
+        $this->cache = CacheManager::getInstance();
         $this->languageDetector = new LanguageDetector();
         
         $this->ensureCacheDirectory();
