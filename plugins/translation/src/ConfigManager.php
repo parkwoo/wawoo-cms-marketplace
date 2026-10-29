@@ -1,6 +1,8 @@
 <?php
 namespace Wawoo\Plugin\Translation;
 
+use Wawoo\Core\Crypto;
+
 /**
  * Manages plugin configuration
  */
@@ -122,6 +124,9 @@ class ConfigManager
         if (file_exists($settingsFile)) {
             $settings = json_decode((string)file_get_contents($settingsFile), true);
             if (is_array($settings)) {
+                if (isset($settings['api_key']) && is_string($settings['api_key'])) {
+                    $settings['api_key'] = Crypto::open($settings['api_key']) ?? '';
+                }
                 return $settings;
             }
         }
@@ -142,7 +147,11 @@ class ConfigManager
         }
         
         // Save settings atomically with restrictive permissions (holds api_key).
-        $content = json_encode(self::$config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $out = self::$config;
+        if (!empty($out['api_key']) && is_string($out['api_key'])) {
+            $out['api_key'] = Crypto::seal($out['api_key']);
+        }
+        $content = json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         $tmp = $settingsFile . '.tmp';
         file_put_contents($tmp, $content);
         @chmod($tmp, 0600);

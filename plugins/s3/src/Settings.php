@@ -1,6 +1,8 @@
 <?php
 namespace Wawoo\Plugin\S3;
 
+use Wawoo\Core\Crypto;
+
 /**
  * Admin settings page for the S3 media plugin, dispatched by the admin
  * console at /admin/?action=settings&plugin=s3 (requires "settings": true
@@ -80,7 +82,7 @@ final class Settings
         $settings['public_base'] = self::field($post, 'public_base', $cfg);
         $settings['prefix'] = self::field($post, 'prefix', $cfg);
         $settings['access_key'] = self::credential($post, 'access_key', $cfg);
-        $settings['secret_key'] = self::credential($post, 'secret_key', $cfg);
+        $settings['secret_key'] = Crypto::seal(self::credential($post, 'secret_key', $cfg));
         $settings['path_style'] = !empty($post['path_style']);
         $settings['force_path'] = !empty($post['force_path']);
         $settings['allow_http'] = !empty($post['allow_http']);

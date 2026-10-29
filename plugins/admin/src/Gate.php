@@ -41,6 +41,13 @@ final class Gate
             exit;
         }
 
+        // When the admin-totp plugin is enabled it owns authentication
+        // (password + second factor). Never run a second, TOTP-less login here:
+        // defer to the admin-totp Guard until the session is fully authed.
+        $totpOwnsAuth = defined('ENABLED_PLUGINS')
+            && is_array(ENABLED_PLUGINS)
+            && in_array('admin-totp', ENABLED_PLUGINS, true);
+
         if (session_status() === PHP_SESSION_NONE) {
             session_set_cookie_params([
                 'httponly' => true,
@@ -50,6 +57,10 @@ final class Gate
             session_start();
         }
         $isAuthed = !empty($_SESSION['wawoo_admin']);
+
+        if ($totpOwnsAuth && !$isAuthed) {
+            return; // let the admin-totp Guard render the password/TOTP prompt
+        }
 
         // Login: rate-limited password check, regenerate session id on success.
         if (!$isAuthed && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['pw'])) {

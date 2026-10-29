@@ -1,6 +1,8 @@
 <?php
 namespace Wawoo\Plugin\S3;
 
+use Wawoo\Core\Crypto;
+
 /**
  * Merges plugin.json defaults with the optional $WAWOO_S3 override
  * defined in config.local.php, then applies any settings saved by the
@@ -61,6 +63,9 @@ final class Config
             return [];
         }
         $raw = json_decode((string)@file_get_contents($file), true);
+        if (is_array($raw) && isset($raw['secret_key']) && is_string($raw['secret_key'])) {
+            $raw['secret_key'] = Crypto::open($raw['secret_key']) ?? '';
+        }
         return is_array($raw) ? $raw : [];
     }
 }

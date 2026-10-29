@@ -1,6 +1,8 @@
 <?php
 namespace Wawoo\Plugin\AdminTotp;
 
+use Wawoo\Core\Crypto;
+
 /**
  * Persistent admin state (TOTP secret, backup codes, last-login time).
  * Stored as JSON at plugins/admin-totp/data/admin.json.
@@ -55,7 +57,7 @@ final class Store
         $secret = is_string($secret) && $secret !== '' ? $secret : Totp::generateSecret();
         $codes = self::generateBackupCodes();
         self::save([
-            'totp_secret'  => $secret,
+            'totp_secret'  => Crypto::seal($secret),
             'backup_codes' => $codes,
             'enabled_at'   => time(),
         ]);
@@ -73,7 +75,7 @@ final class Store
     public static function getSecret(): ?string
     {
         $s = self::load();
-        return $s['totp_secret'] ?? null;
+        return isset($s['totp_secret']) ? Crypto::open((string)$s['totp_secret']) : null;
     }
 
     public static function consumeBackupCode(string $code): bool
