@@ -32,21 +32,23 @@ final class Gate
             return;
         }
         $base = rtrim((string)($root ?? dirname(__DIR__, 3)), '/');
+
+        // When the admin-totp plugin is enabled it owns authentication
+        // (password + second factor). Use the runtime enabled list (the
+        // cache/plugins.json override wins over the constant), and never run
+        // a second, TOTP-less login here.
+        $totpOwnsAuth = class_exists('\\Wawoo\\Core\\PluginManager')
+            && in_array('admin-totp', \Wawoo\Core\PluginManager::enabledPlugins(), true)
+            && class_exists('\\Wawoo\\Plugin\\AdminTotp\\Guard');
+
         $hasCredential = !empty($GLOBALS['WAWOO_ADMIN']['password_hash'])
             || (defined('ADMIN_PASSWORD') && ADMIN_PASSWORD !== '');
-        if (!$hasCredential) {
+        if (!$totpOwnsAuth && !$hasCredential) {
             http_response_code(503);
             echo '<h1>' . t('admin.disabled', 'Admin disabled') . '</h1><p>'
                 . t('admin.disabled_hint', 'Set an admin password (ADMIN_PASSWORD or $GLOBALS[WAWOO_ADMIN][password_hash]) in config.local.php to enable admin.') . '</p>';
             exit;
         }
-
-        // When the admin-totp plugin is enabled it owns authentication
-        // (password + second factor). Never run a second, TOTP-less login here:
-        // defer to the admin-totp Guard until the session is fully authed.
-        $totpOwnsAuth = defined('ENABLED_PLUGINS')
-            && is_array(ENABLED_PLUGINS)
-            && in_array('admin-totp', ENABLED_PLUGINS, true);
 
         if (session_status() === PHP_SESSION_NONE) {
             session_set_cookie_params([
