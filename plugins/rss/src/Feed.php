@@ -36,6 +36,8 @@ final class Feed
             echo '<pubDate>' . date(DATE_RSS, strtotime($p['date'])) . '</pubDate>';
             echo '<category>' . htmlspecialchars($p['category']) . '</category>';
             $summary = $p['excerpt'] !== '' ? $p['excerpt'] : mb_substr(strip_tags($p['content']), 0, 200);
+            // Prevent CDATA break-out ("]]>") from injecting markup into the feed.
+            $summary = str_replace(']]>', ']]]]><![CDATA[>', $summary);
             echo '<description><![CDATA[' . $summary . ']]></description>';
             echo '</item>' . "\n";
         }

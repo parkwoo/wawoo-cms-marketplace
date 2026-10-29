@@ -11,18 +11,27 @@ class Settings
      */
     public function handle(?string $root): void
     {
-        // Check if user is authenticated
+        // Reached only through the CMS admin console, which already
+        // authenticates the session. Never run a separate login here
+        // (this class previously had a hardcoded admin/admin backdoor).
         if (!$this->isAuthenticated()) {
-            $this->showLogin();
-            return;
+            http_response_code(403);
+            header('Content-Type: text/plain; charset=utf-8');
+            echo 'Forbidden';
+            exit;
         }
-        
-        // Handle form submissions
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+            $token = (string)($_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
+            if (!CSRFTokenManager::validate($token)) {
+                http_response_code(403);
+                header('Content-Type: text/plain; charset=utf-8');
+                echo 'Invalid CSRF token';
+                exit;
+            }
             $this->handlePostRequest();
         }
-        
-        // Display settings page
+
         $this->displaySettings();
     }
     
@@ -31,7 +40,8 @@ class Settings
      */
     private function isAuthenticated(): bool
     {
-        return isset($_SESSION['admin']) && $_SESSION['admin'];
+        return !empty($_SESSION['wawoo_admin'])
+            || !empty($_SESSION['wawoo_admin_totp_ok']);
     }
     
     /**
@@ -138,19 +148,8 @@ class Settings
      */
     private function handlePostRequest(): void
     {
-        if (isset($_POST['username']) && isset($_POST['password'])) {
-            // Simple authentication - in production, use proper authentication
-            if ($_POST['username'] === 'admin' && $_POST['password'] === 'admin') {
-                $_SESSION['admin'] = true;
-                $_SESSION['username'] = $_POST['username'];
-                header('Location: /admin/translation/settings');
-                exit;
-            } else {
-                $_SESSION['login_error'] = 'ユーザー名またはパスワードが正しくありません。';
-                header('Location: /admin/translation/settings');
-                exit;
-            }
-        }
+        // Settings persistence is owned by AdminPanel (admin.before_render).
+        // This page is display-only; there is no separate login.
     }
     
     /**
@@ -285,13 +284,15 @@ class Settings
                 </div>
                 
                 <?php if (isset($_SESSION['message'])): ?>
-                    <div class="<?php echo $_SESSION['message_type'] ?? 'info'; ?>">
+                    <?php $__mt = $_SESSION['message_type'] ?? 'info'; if (!in_array($__mt, ['info', 'success', 'error', 'warning'], true)) { $__mt = 'info'; } ?>
+                    <div class="<?php echo $__mt; ?>">
                         <?php echo htmlspecialchars($_SESSION['message']); ?>
                     </div>
                     <?php unset($_SESSION['message']); ?>
                 <?php endif; ?>
                 
                 <form method="POST">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(CSRFTokenManager::getCurrentToken() ?: CSRFTokenManager::generate()); ?>">
                     <div id="basic" class="tab-content active">
                         <div class="section">
                             <h2>基本設定</h2>
@@ -347,7 +348,7 @@ class Settings
                             
                             <div class="form-group">
                                 <label for="api_key">APIキー</label>
-                                <input type="password" name="api_key" id="api_key" value="<?php echo htmlspecialchars($config['api_key']); ?>">
+                                <input type="password" name="api_key" id="api_key" value="" autocomplete="new-password" placeholder="<?php echo $config['api_key'] !== '' ? '******** (configured)' : 'not set'; ?>">
                             </div>
                         </div>
                     </div>
@@ -471,7 +472,7 @@ class Settings
                         params.append(key, value);
                     }
                     
-                    fetch('<?php echo $_SERVER['PHP_SELF']; ?>?action=test_connection', {
+                    fetch(<?php echo json_encode($_SERVER['PHP_SELF']); ?> + '?action=test_connection', {
                         method: 'POST',
                         body: params
                     })
@@ -496,7 +497,7 @@ class Settings
                         params.append(key, value);
                     }
                     
-                    fetch('<?php echo $_SERVER['PHP_SELF']; ?>?action=export_config', {
+                    fetch(<?php echo json_encode($_SERVER['PHP_SELF']); ?> + '?action=export_config', {
                         method: 'POST',
                         body: params
                     })
@@ -532,7 +533,7 @@ class Settings
                             const formData = new FormData();
                             formData.append('config', event.target.result);
                             
-                            fetch('<?php echo $_SERVER['PHP_SELF']; ?>?action=import_config', {
+                            fetch(<?php echo json_encode($_SERVER['PHP_SELF']); ?> + '?action=import_config', {
                                 method: 'POST',
                                 body: formData
                             })

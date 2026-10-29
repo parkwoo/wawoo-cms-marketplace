@@ -144,7 +144,7 @@ final class Form
 
     private static function isAdmin(): bool
     {
-        return !empty($_SESSION['wawoo_admin']) || !empty($_SESSION['wawoo_admin_authed']);
+        return !empty($_SESSION['wawoo_admin']);
     }
 
     private static function deny(): void
@@ -166,14 +166,29 @@ final class Form
         $ip  = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
         $key = 'rate_' . preg_replace('/[^a-zA-Z0-9_.-]/', '_', $ip) . '_' . date('YmdH');
         $file = Store::dataDir() . '/' . $key . '.json';
-        $n = 0;
-        if (is_file($file)) {
-            $n = (int)file_get_contents($file);
+
+        // Atomic read-modify-write under an exclusive lock to avoid a
+        // check/act (TOCTOU) race that would let the limit be bypassed.
+        $fp = @fopen($file, 'c+');
+        if ($fp === false) {
+            return true; // fail open on IO error; never block real users
         }
-        if ($n >= (int)$cfg['rate_limit_per_hour']) {
-            return false;
+        try {
+            if (!flock($fp, LOCK_EX)) {
+                return true;
+            }
+            $n = (int)trim((string)stream_get_contents($fp));
+            if ($n >= (int)$cfg['rate_limit_per_hour']) {
+                return false;
+            }
+            ftruncate($fp, 0);
+            rewind($fp);
+            fwrite($fp, (string)($n + 1));
+            fflush($fp);
+            return true;
+        } finally {
+            flock($fp, LOCK_UN);
+            fclose($fp);
         }
-        file_put_contents($file, (string)($n + 1));
-        return true;
     }
 }

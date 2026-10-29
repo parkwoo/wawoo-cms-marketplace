@@ -65,7 +65,10 @@ final class Guard
             exit;
         }
 
-        // Authed. TOTP verified (or not configured).
+        // Authed (password, plus TOTP when a secret is configured).
+        // `wawoo_admin` is the CMS-wide "fully authenticated" flag: set it
+        // only here, never at the password-only step.
+        $_SESSION['wawoo_admin'] = true;
         Hook::fire('admin.authed', $_SESSION);
     }
 

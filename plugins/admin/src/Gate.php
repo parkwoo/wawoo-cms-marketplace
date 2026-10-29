@@ -42,6 +42,11 @@ final class Gate
         }
 
         if (session_status() === PHP_SESSION_NONE) {
+            session_set_cookie_params([
+                'httponly' => true,
+                'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+                'samesite' => 'Lax',
+            ]);
             session_start();
         }
         $isAuthed = !empty($_SESSION['wawoo_admin']);
@@ -51,6 +56,11 @@ final class Gate
             $lock = self::loginLockout((string)($_SERVER['REMOTE_ADDR'] ?? ''));
             if ($lock['locked']) {
                 $this->renderLogin(t('admin.locked', 'Too many attempts. Try again later.'), 429);
+                exit;
+            }
+            $csrf = (string)($_POST['csrf'] ?? '');
+            if (empty($_SESSION['wawoo_admin_login_csrf']) || !hash_equals((string)$_SESSION['wawoo_admin_login_csrf'], $csrf)) {
+                $this->renderLogin(t('admin.csrf', 'Session expired. Please reload and try again.'), 403);
                 exit;
             }
             $passwordOk = false;
@@ -252,7 +262,13 @@ final class Gate
     private function renderLogin(string $message, int $status): void
     {
         http_response_code($status);
-        Theme::renderFile(__DIR__ . '/../theme/login.php', ['message' => $message]);
+        if (session_status() === PHP_SESSION_ACTIVE && empty($_SESSION['wawoo_admin_login_csrf'])) {
+            $_SESSION['wawoo_admin_login_csrf'] = bin2hex(random_bytes(32));
+        }
+        Theme::renderFile(__DIR__ . '/../theme/login.php', [
+            'message' => $message,
+            'csrf'    => (string)($_SESSION['wawoo_admin_login_csrf'] ?? ''),
+        ]);
     }
 
     private static function loginFile(): string

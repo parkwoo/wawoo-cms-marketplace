@@ -94,6 +94,6 @@ final class AdminPanel
 
     private static function isAdmin(): bool
     {
-        return !empty($_SESSION['wawoo_admin']) || !empty($_SESSION['wawoo_admin_authed']);
+        return !empty($_SESSION['wawoo_admin']);
     }
 }

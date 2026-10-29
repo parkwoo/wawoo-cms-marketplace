@@ -25,6 +25,7 @@ $css = (string)@file_get_contents(__DIR__ . '/admin.css');
             <div class="wa-alert wa-alert--error"><?= $e($message) ?></div>
         <?php endif; ?>
         <form method="post" action="/admin/">
+            <input type="hidden" name="csrf" value="<?= $e($csrf ?? '') ?>">
             <div class="wa-field">
                 <label for="pw">Admin password</label>
                 <input class="wa-input" id="pw" type="password" name="pw" autofocus required autocomplete="current-password">

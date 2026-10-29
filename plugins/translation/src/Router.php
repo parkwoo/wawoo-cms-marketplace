@@ -39,6 +39,28 @@ class Router
      */
     private function handleApiRoutes(): void
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+        // All /api/translation* actions require an authenticated CMS admin.
+        if (empty($_SESSION['wawoo_admin']) && empty($_SESSION['wawoo_admin_totp_ok'])) {
+            http_response_code(403);
+            $this->sendJson(['success' => false, 'error' => 'forbidden']);
+        }
+        // State-changing actions require a valid CSRF token.
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+            $token = (string)($_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
+            if (!CSRFTokenManager::validate($token)) {
+                http_response_code(403);
+                $this->sendJson(['success' => false, 'error' => 'invalid_csrf']);
+            }
+        }
+        // Do not spend the API key / mutate the queue while the plugin is off.
+        if (!ConfigManager::get('enabled')) {
+            http_response_code(403);
+            $this->sendJson(['success' => false, 'error' => 'disabled']);
+        }
+
         $action = $_GET['action'] ?? '';
         
         switch ($action) {
