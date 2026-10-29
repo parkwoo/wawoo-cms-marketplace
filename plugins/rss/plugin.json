@@ -1,0 +1,18 @@
+{
+    "name": "rss",
+    "type": "plugin",
+    "version": "1.0.0",
+    "namespace": "Wawoo\\Plugin\\Rss",
+    "entry": "Plugin",
+    "requires": {
+        "core": ">=1.0.0"
+    },
+    "hooks": {
+        "core.request": "Feed",
+        "theme.nav": "NavLink",
+        "theme.head.after": "HeadLink"
+    },
+    "config": {
+        "max_items": 20
+    }
+}

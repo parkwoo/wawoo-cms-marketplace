@@ -1,0 +1,6 @@
+# Local env files
+.env
+*.log
+
+# Test sandboxes
+tests/_tmp/

@@ -1,0 +1,39 @@
+{
+    "name": "translation",
+    "type": "plugin",
+    "version": "1.0.0",
+    "namespace": "Wawoo\\Plugin\\Translation",
+    "entry": "Plugin",
+    "requires": {
+        "core": ">=1.0.0"
+    },
+    "hooks": {
+        "admin.before_render": "AdminPanel",
+        "core.request": "Router",
+        "post.load": "ContentFinder",
+        "page.load": "ContentFinder",
+        "post.html": "Translator",
+        "page.html": "Translator"
+    },
+    "settings": true,
+    "config": {
+        "enabled": false,
+        "target_language": "en",
+        "source_language": "ja",
+        "provider": "openai",
+        "model": "gpt-3.5-turbo",
+        "api_key": "",
+        "auto_translate": false,
+        "validate_translation": true,
+        "fallback_to_original": true,
+        "max_retries": 3,
+        "timeout": 30,
+        "batch_size": 5,
+        "excluded_fields": ["title", "slug", "date", "author"],
+        "custom_prompts": {
+            "default": "Translate the following Japanese content to natural-sounding English. Maintain the original meaning and formatting.",
+            "technical": "Translate technical Japanese content to English with precise terminology.",
+            "casual": "Translate casual Japanese content to natural, conversational English."
+        }
+    }
+}
