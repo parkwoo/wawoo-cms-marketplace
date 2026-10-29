@@ -12,7 +12,7 @@ folder under the site's `plugins/` (or `themes/`) directory and enabling it.
 
 - `index.json` — machine-readable catalog of every listed plugin/theme.
 - `plugins/<name>/` — every first-party plugin, hosted in this repo.
-- `themes/<name>/` — first-party themes (none hosted yet; see `clay` below).
+- `themes/<name>/` — first-party themes (none; the `clay` theme ships in wawoo-cms core).
 - `bundles/default.json` — a starter set of enabled plugins.
 
 The `admin` plugin ships its **own self-contained admin theme** under
@@ -26,9 +26,8 @@ independently of the site's front-end theme via the core `Theme::renderFile()`.
   `maintenance`, `mermaid`, `mlang`, `pagination`, `password-gate`, `publish`,
   `s3`, `sitemap-html`, `tag-cloud`. The matching `wawoo-plugin-*` repos are the
   upstream development homes; the copy here is the install source.
-- The `clay` theme is referenced from its own repo
-  (`wawoo-theme-clay`) via `"source": { "kind": "git", ... }` — the only
-  non-hosted item.
+- Every item is **hosted here** (`plugins/<name>/`); there are no
+  git-source items. The `clay` theme ships in wawoo-cms core instead.
 
 ## Install an item
 
@@ -37,7 +36,7 @@ From a wawoo-cms checkout, with this repo as a sibling
 
 ```bash
 php bin/wawoo plugin:search rss
-php bin/wawoo plugin:install rss --enable     # hosted: copied; git: cloned
+php bin/wawoo plugin:install rss --enable     # copied from this repo
 php bin/wawoo bundle:install default          # a curated set (bundles/default.json)
 ```
 
