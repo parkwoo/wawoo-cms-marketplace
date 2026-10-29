@@ -165,3 +165,7 @@ table.wa-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
   .wa-toggle { display: inline-block; }
   .wa-content { padding: 1rem; }
 }
+
+/* client-side table filter */
+.wa-panel__head { flex-wrap: wrap; }
+.wa-search { max-width: 240px; margin-left: auto; }

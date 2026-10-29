@@ -77,7 +77,7 @@ $siteUrl = defined('BASE_URL') ? BASE_URL : '/';
 
     <?php if ($action === 'plugins'): ?>
         <section class="wa-panel">
-            <div class="wa-panel__head"><h2 class="wa-panel__title">Plugins</h2></div>
+            <div class="wa-panel__head"><h2 class="wa-panel__title">Plugins</h2><input class="wa-input wa-search" type="search" data-filter-target=".wa-table" placeholder="Filter plugins…" aria-label="Filter plugins…"></div>
             <div class="wa-table-wrap">
                 <table class="wa-table">
                     <thead><tr><th>Name</th><th>Version</th><th>Description</th><th>Status</th></tr></thead>
@@ -112,7 +112,7 @@ $siteUrl = defined('BASE_URL') ? BASE_URL : '/';
 
     <?php elseif ($action === 'themes'): ?>
         <section class="wa-panel">
-            <div class="wa-panel__head"><h2 class="wa-panel__title">Themes</h2></div>
+            <div class="wa-panel__head"><h2 class="wa-panel__title">Themes</h2><input class="wa-input wa-search" type="search" data-filter-target=".wa-table" placeholder="Filter themes…" aria-label="Filter themes…"></div>
             <div class="wa-table-wrap">
                 <table class="wa-table">
                     <thead><tr><th>Name</th><th>Version</th><th>Description</th><th>Status</th></tr></thead>
@@ -150,7 +150,7 @@ $siteUrl = defined('BASE_URL') ? BASE_URL : '/';
         </div>
 
         <section class="wa-panel">
-            <div class="wa-panel__head"><h2 class="wa-panel__title">Posts</h2></div>
+            <div class="wa-panel__head"><h2 class="wa-panel__title">Posts</h2><input class="wa-input wa-search" type="search" data-filter-target=".wa-table" placeholder="Filter posts…" aria-label="Filter posts…"></div>
             <div class="wa-table-wrap">
                 <table class="wa-table">
                     <thead><tr><th>Title</th><th>Date</th><th>Category</th><th>Status</th><th>Actions</th></tr></thead>

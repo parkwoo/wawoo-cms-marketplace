@@ -22,6 +22,14 @@ independently of the site's front-end theme via the core `Theme::renderFile()`.
 Plugins whose source lives in their own repository are referenced from
 `index.json` with `"source": { "kind": "git", ... }` and are not copied here.
 
+### Source of truth
+
+- `code` and `mermaid` are canonical in their own repos
+  (`wawoo-plugin-code`, `wawoo-plugin-mermaid`) and are only referenced here —
+  do not add a second in-repo copy.
+- `admin`, `rss`, `search`, and `translation` are hosted here; the in-repo
+  copy under `plugins/` is canonical.
+
 ## Install an item
 
 From a wawoo-cms checkout, with this repo as a sibling
