@@ -33,6 +33,20 @@
       "summary": "TOTP second factor for the admin console."
     },
     {
+      "name": "ads",
+      "type": "plugin",
+      "version": "1.0.0",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/ads"
+      },
+      "summary": "AdSense slots in head, index, post and footer.",
+      "upstream": "ai-wawoo-jp-frontend@a532e37"
+    },
+    {
       "name": "analytics",
       "type": "plugin",
       "version": "1.0.0",
@@ -44,6 +58,48 @@
         "path": "plugins/analytics"
       },
       "summary": "Analytics script injection."
+    },
+    {
+      "name": "api",
+      "type": "plugin",
+      "version": "0.1.0",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/api"
+      },
+      "summary": "JSON API: token-auth publish + R2/S3 presign (X-Api-Token).",
+      "upstream": "ai-wawoo-jp-frontend@a532e37"
+    },
+    {
+      "name": "audio-inline",
+      "type": "plugin",
+      "version": "0.1.0",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/audio-inline"
+      },
+      "summary": "Inline per-language audio player in the post body.",
+      "upstream": "ai-wawoo-jp-frontend@a532e37"
+    },
+    {
+      "name": "audiometa",
+      "type": "plugin",
+      "version": "1.0.0",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/audiometa"
+      },
+      "summary": "Inject audio metadata into posts/pages.",
+      "upstream": "ai-wawoo-jp-frontend@a532e37"
     },
     {
       "name": "code",
@@ -96,6 +152,20 @@
         "path": "plugins/maintenance"
       },
       "summary": "Maintenance mode."
+    },
+    {
+      "name": "media-player",
+      "type": "plugin",
+      "version": "1.0.0",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/media-player"
+      },
+      "summary": "YouTube/audio player with host allow-list and vendored Plyr assets.",
+      "upstream": "ai-wawoo-jp-frontend@a532e37"
     },
     {
       "name": "mermaid",
@@ -163,6 +233,20 @@
       "summary": "Publish states and scheduled publishing."
     },
     {
+      "name": "review",
+      "type": "plugin",
+      "version": "1.0.0",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/review"
+      },
+      "summary": "Language-scoped review/moderation console (admin session).",
+      "upstream": "ai-wawoo-jp-frontend@a532e37"
+    },
+    {
       "name": "rss",
       "type": "plugin",
       "version": "1.0.0",
@@ -174,6 +258,21 @@
         "path": "plugins/rss"
       },
       "summary": "RSS feed at /rss plus nav and head links."
+    },
+    {
+      "name": "rss-lang",
+      "type": "plugin",
+      "version": "1.0.0",
+      "requires": {
+        "core": ">=1.0.0",
+        "mlang": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/rss-lang"
+      },
+      "summary": "Per-language RSS feeds (requires mlang).",
+      "upstream": "ai-wawoo-jp-frontend@a532e37"
     },
     {
       "name": "s3",

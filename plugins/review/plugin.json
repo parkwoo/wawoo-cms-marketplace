@@ -1,0 +1,17 @@
+{
+    "name": "review",
+    "type": "plugin",
+    "version": "1.0.0",
+    "namespace": "Wawoo\\Plugin\\Review",
+    "entry": "Plugin",
+    "requires": {
+        "core": ">=1.0.0"
+    },
+    "hooks": {
+        "core.request": "Router"
+    },
+    "settings": false,
+    "config": {
+        "store": "cache/settings/reviews.json"
+    }
+}

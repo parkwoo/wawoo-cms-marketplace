@@ -1,0 +1,21 @@
+{
+    "name": "media-player",
+    "type": "plugin",
+    "version": "1.0.0",
+    "namespace": "Wawoo\\Plugin\\MediaPlayer",
+    "entry": "Plugin",
+    "requires": {
+        "core": ">=1.0.0"
+    },
+    "hooks": {
+        "core.request": "Serve",
+        "theme.head.after": "Assets",
+        "post.html": "Player"
+    },
+    "config": {
+        "probe_timeout_ms": 4000,
+        "storage_key": "yt-blocked",
+        "preload": "none",
+        "allow_hosts": ["youtube.com", "youtu.be", "youtube-nocookie.com"]
+    }
+}

@@ -1,0 +1,36 @@
+{
+    "name": "ads",
+    "type": "plugin",
+    "version": "1.0.0",
+    "namespace": "Wawoo\\Plugin\\Ads",
+    "entry": "Plugin",
+    "requires": {
+        "core": ">=1.0.0"
+    },
+    "hooks": {
+        "theme.head.after": "Head",
+        "theme.index.before": "IndexTopSlots",
+        "theme.index.after": "IndexSlots",
+        "post.html": "PostSlots",
+        "theme.footer": "FooterSlots"
+    },
+    "config": {
+        "adsense_client": "",
+        "adsense_slots": {
+            "post_top": "",
+            "post_inline": "",
+            "post_bottom": "",
+            "index_top": "",
+            "index_bottom": ""
+        },
+        "amazon_tag_id": "",
+        "amazon_units": {
+            "post_bottom": "",
+            "index_bottom": ""
+        },
+        "lazy": true,
+        "consent_cmp": true,
+        "disable_key": "ads",
+        "preview": false
+    }
+}
