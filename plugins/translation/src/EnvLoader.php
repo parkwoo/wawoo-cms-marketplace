@@ -70,7 +70,35 @@ class EnvLoader
      */
     public static function get(string $key, $default = null)
     {
-        return self::$env[$key] ?? $_ENV[$key] ?? $_SERVER[$key] ?? $default;
+        $value = self::$env[$key] ?? $_ENV[$key] ?? $_SERVER[$key] ?? null;
+        if ($value === null) {
+            $env = getenv($key);
+            if ($env !== false) {
+                $value = $env;
+            }
+        }
+        if ($value === null) {
+            return $default;
+        }
+        return self::castScalar($value);
+    }
+
+    private static function castScalar($value)
+    {
+        if (is_bool($value) || is_int($value) || is_float($value)) {
+            return $value;
+        }
+        if (!is_string($value)) {
+            return $value;
+        }
+        $lower = strtolower($value);
+        if ($lower === 'true' || $lower === '(true)') { return true; }
+        if ($lower === 'false' || $lower === '(false)') { return false; }
+        if ($lower === 'null' || $lower === '(null)') { return null; }
+        if ($lower === 'empty' || $lower === '(empty)') { return ''; }
+        if (preg_match('/^-?\d+$/', $value)) { return (int)$value; }
+        if (preg_match('/^-?\d+\.\d+$/', $value)) { return (float)$value; }
+        return $value;
     }
     
     /**
@@ -89,7 +117,26 @@ class EnvLoader
      */
     public static function has(string $key): bool
     {
-        return isset(self::$env[$key]) || isset($_ENV[$key]) || isset($_SERVER[$key]);
+        return isset(self::$env[$key]) || isset($_ENV[$key]) || isset($_SERVER[$key])
+            || getenv($key) !== false;
+    }
+
+    public static function reset(): void
+    {
+        foreach (array_keys(self::$env) as $k) {
+            @putenv((string)$k);
+        }
+        self::$env = [];
+        foreach (array_keys($_ENV) as $k) {
+            if (str_starts_with((string)$k, 'TRANSLATION_')) {
+                unset($_ENV[$k]);
+            }
+        }
+        foreach (array_keys($_SERVER) as $k) {
+            if (str_starts_with((string)$k, 'TRANSLATION_')) {
+                unset($_SERVER[$k]);
+            }
+        }
     }
     
     /**
@@ -151,15 +198,15 @@ class EnvLoader
     /**
      * Validate API key format
      */
-    private static function validateApiKey(string $apiKey): bool
+    public static function validateApiKey(string $apiKey): bool
     {
         // Check for OpenAI format
-        if (preg_match('/^sk-[a-zA-Z0-9]{48}$/', $apiKey)) {
+        if (preg_match('/^sk-[a-zA-Z0-9]{40,}$/', $apiKey)) {
             return true;
         }
         
         // Check for Anthropic format
-        if (preg_match('/^sk-ant-api03-[a-zA-Z0-9_-]{42}$/', $apiKey)) {
+        if (preg_match('/^sk-ant-api03-[a-zA-Z0-9_-]{40,}$/', $apiKey)) {
             return true;
         }
         

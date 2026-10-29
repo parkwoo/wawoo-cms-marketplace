@@ -13,12 +13,13 @@ class EnvLoaderTest extends TestCase
     
     protected function setUp(): void
     {
+        EnvLoader::reset();
         // Create a temporary .env file for testing
         $this->testEnvFile = sys_get_temp_dir() . '/test.env';
         
         $envContent = <<<'ENV'
 # Test environment variables
-TRANSLATION_API_KEY=test-api-key-1234567890123456789012345678901234567890
+TRANSLATION_API_KEY=sk-1234567890123456789012345678901234567890
 TRANSLATION_PROVIDER=openai
 TRANSLATION_MODEL=gpt-3.5-turbo
 TRANSLATION_TARGET_LANGUAGE=en
@@ -52,7 +53,7 @@ ENV;
         EnvLoader::load($this->testEnvFile);
         
         // Test loaded values
-        $this->assertEquals('test-api-key-1234567890123456789012345678901234567890', EnvLoader::get('TRANSLATION_API_KEY'));
+        $this->assertEquals('sk-1234567890123456789012345678901234567890', EnvLoader::get('TRANSLATION_API_KEY'));
         $this->assertEquals('openai', EnvLoader::get('TRANSLATION_PROVIDER'));
         $this->assertEquals('gpt-3.5-turbo', EnvLoader::get('TRANSLATION_MODEL'));
         $this->assertEquals('en', EnvLoader::get('TRANSLATION_TARGET_LANGUAGE'));
@@ -69,7 +70,7 @@ ENV;
         EnvLoader::load($this->testEnvFile);
         
         // Test existing variable
-        $this->assertEquals('test-api-key-1234567890123456789012345678901234567890', EnvLoader::get('TRANSLATION_API_KEY'));
+        $this->assertEquals('sk-1234567890123456789012345678901234567890', EnvLoader::get('TRANSLATION_API_KEY'));
         
         // Test non-existing variable with default
         $this->assertEquals('default', EnvLoader::get('NON_EXISTING_VAR', 'default'));
@@ -130,7 +131,7 @@ ENV;
         
         $merged = EnvLoader::loadAndMerge();
         
-        $this->assertEquals('test-api-key-1234567890123456789012345678901234567890', $merged['api_key']);
+        $this->assertEquals('sk-1234567890123456789012345678901234567890', $merged['api_key']);
         $this->assertEquals('openai', $merged['provider']);
         $this->assertEquals('gpt-3.5-turbo', $merged['model']);
         $this->assertEquals('en', $merged['target_language']);

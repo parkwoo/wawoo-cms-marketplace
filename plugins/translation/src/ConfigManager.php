@@ -19,23 +19,15 @@ class ConfigManager
         // Load environment variables first
         EnvLoader::load();
         
-        // Load default config
+        // Merge priority (low -> high):
+        //   default < plugin.json < cache settings < $GLOBALS < environment
         $defaultConfig = self::getDefaultConfig();
-        
-        // Load plugin config
-        $pluginConfig = self::loadPluginConfig();
-        
-        // Load environment variables and merge
-        $envConfig = EnvLoader::loadAndMerge();
-        
-        // Merge configs with priority: env > runtime > plugin > default
-        self::$config = array_merge($defaultConfig, $pluginConfig, $envConfig);
-        
-        // Load runtime config from globals
-        self::loadRuntimeConfig();
-        
-        // Load settings from cache
-        self::loadSettings();
+        $pluginConfig  = self::loadPluginConfig();
+        $settings      = self::readSettings();
+        $runtime       = self::readRuntimeConfig();
+        $envConfig     = EnvLoader::loadAndMerge();
+
+        self::$config = array_merge($defaultConfig, $pluginConfig, $settings, $runtime, $envConfig);
     }
     
     /**
@@ -112,34 +104,28 @@ class ConfigManager
     /**
      * Load runtime configuration from globals
      */
-    private static function loadRuntimeConfig(): void
+    private static function readRuntimeConfig(): array
     {
         $globalKey = 'WAWOO_TRANSLATION';
-        
-        if (isset($GLOBALS[$globalKey])) {
-            $runtimeConfig = $GLOBALS[$globalKey];
-            
-            if (is_array($runtimeConfig)) {
-                self::$config = array_merge(self::$config, $runtimeConfig);
-            }
+        if (isset($GLOBALS[$globalKey]) && is_array($GLOBALS[$globalKey])) {
+            return $GLOBALS[$globalKey];
         }
+        return [];
     }
     
     /**
      * Load settings from cache
      */
-    private static function loadSettings(): void
+    private static function readSettings(): array
     {
         $settingsFile = self::getSettingsFile();
-        
         if (file_exists($settingsFile)) {
-            $content = file_get_contents($settingsFile);
-            $settings = json_decode($content, true);
-            
+            $settings = json_decode((string)file_get_contents($settingsFile), true);
             if (is_array($settings)) {
-                self::$config = array_merge(self::$config, $settings);
+                return $settings;
             }
         }
+        return [];
     }
     
     /**
@@ -191,13 +177,13 @@ class ConfigManager
         
         switch ($provider) {
             case 'openai':
-                if (!preg_match('/^sk-[a-zA-Z0-9]{48}$/', $apiKey)) {
+                if (!preg_match('/^sk-[a-zA-Z0-9]{40,}$/', $apiKey)) {
                     $errors[] = 'OpenAI API key format is invalid';
                 }
                 break;
                 
             case 'anthropic':
-                if (!preg_match('/^sk-ant-api03-[a-zA-Z0-9_-]{42}$/', $apiKey)) {
+                if (!preg_match('/^sk-ant-api03-[a-zA-Z0-9_-]{40,}$/', $apiKey)) {
                     $errors[] = 'Anthropic API key format is invalid';
                 }
                 break;
@@ -231,6 +217,11 @@ class ConfigManager
     /**
      * Reset configuration to defaults
      */
+    public static function resetState(): void
+    {
+        self::$config = [];
+    }
+
     public static function reset(): void
     {
         self::$config = self::getDefaultConfig();
@@ -262,7 +253,7 @@ class ConfigManager
             self::$config = $tempConfig;
             
             // Only validate if required fields are present
-            if (isset($config['api_key']) && isset($config['provider'])) {
+            if (!empty($config['api_key']) && isset($config['provider'])) {
                 $errors = self::validate();
                 if (!empty($errors)) {
                     throw new \Exception('Configuration validation failed: ' . implode(', ', $errors));

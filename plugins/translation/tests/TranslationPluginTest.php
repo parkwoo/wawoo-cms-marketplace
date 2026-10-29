@@ -20,6 +20,13 @@ class TranslationPluginTest extends TestCase
     
     protected function setUp(): void
     {
+        // Isolate tests: clear static env/config and cached settings.
+        EnvLoader::reset();
+        ConfigManager::resetState();
+        unset($GLOBALS['WAWOO_TRANSLATION']);
+        $cacheDir = defined('CACHE_DIR') ? CACHE_DIR : __DIR__ . '/../../../cache';
+        @unlink($cacheDir . '/settings/translation.json');
+
         // Initialize configuration for tests
         ConfigManager::init();
         
@@ -165,6 +172,9 @@ class TranslationPluginTest extends TestCase
      */
     public function testApiClient(): void
     {
+        if (!function_exists('curl_init')) {
+            $this->markTestSkipped('APIClient tests require the curl extension');
+        }
         // Test supported providers
         $supported = APIClient::getSupportedProviders();
         $this->assertContains('openai', $supported);
@@ -219,6 +229,9 @@ class TranslationPluginTest extends TestCase
      */
     public function testTranslationBatchProcessing(): void
     {
+        if (!function_exists('curl_init')) {
+            $this->markTestSkipped('batch translation requires the curl extension');
+        }
         ConfigManager::set('enabled', true);
         ConfigManager::set('batch_size', 2);
         
