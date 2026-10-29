@@ -10,153 +10,249 @@
       "name": "admin",
       "type": "plugin",
       "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "hosted", "path": "plugins/admin" },
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/admin"
+      },
       "summary": "Admin console: posts, pages, plugins, themes."
     },
     {
-      "name": "rss",
+      "name": "admin-totp",
       "type": "plugin",
       "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "hosted", "path": "plugins/rss" },
-      "summary": "RSS feed at /rss plus nav and head links."
-    },
-    {
-      "name": "search",
-      "type": "plugin",
-      "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "hosted", "path": "plugins/search" },
-      "summary": "Search page at /search."
-    },
-    {
-      "name": "translation",
-      "type": "plugin",
-      "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "hosted", "path": "plugins/translation" },
-      "summary": "File-based translation with admin panel and ENV-based API key."
-    },
-    {
-      "name": "code",
-      "type": "plugin",
-      "version": "1.3.1",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-code.git", "ref": "main" },
-      "summary": "Syntax highlighting and copy button for code blocks."
-    },
-    {
-      "name": "mermaid",
-      "type": "plugin",
-      "version": "1.1.2",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-mermaid.git", "ref": "main" },
-      "summary": "Mermaid diagram rendering."
-    },
-    {
-      "name": "comments",
-      "type": "plugin",
-      "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-comments.git", "ref": "main" },
-      "summary": "File-based comments with moderation."
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/admin-totp"
+      },
+      "summary": "TOTP second factor for the admin console."
     },
     {
       "name": "analytics",
       "type": "plugin",
       "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-analytics.git", "ref": "main" },
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/analytics"
+      },
       "summary": "Analytics script injection."
+    },
+    {
+      "name": "clay",
+      "type": "theme",
+      "version": "1.0.0",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "git",
+        "url": "https://github.com/parkwoo/wawoo-theme-clay.git",
+        "ref": "main"
+      },
+      "summary": "Warm, paper-like theme (clay)."
+    },
+    {
+      "name": "code",
+      "type": "plugin",
+      "version": "1.3.1",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/code"
+      },
+      "summary": "Syntax highlighting and copy button for code blocks."
+    },
+    {
+      "name": "comments",
+      "type": "plugin",
+      "version": "1.0.0",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/comments"
+      },
+      "summary": "File-based comments with moderation."
     },
     {
       "name": "i18n",
       "type": "plugin",
       "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-i18n.git", "ref": "main" },
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/i18n"
+      },
       "summary": "UI string localisation."
-    },
-    {
-      "name": "mlang",
-      "type": "plugin",
-      "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-mlang.git", "ref": "main" },
-      "summary": "Multi-language content handling."
     },
     {
       "name": "maintenance",
       "type": "plugin",
       "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-maintenance.git", "ref": "main" },
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/maintenance"
+      },
       "summary": "Maintenance mode."
+    },
+    {
+      "name": "mermaid",
+      "type": "plugin",
+      "version": "1.1.2",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/mermaid"
+      },
+      "summary": "Mermaid diagram rendering."
+    },
+    {
+      "name": "mlang",
+      "type": "plugin",
+      "version": "1.0.0",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/mlang"
+      },
+      "summary": "Multi-language content handling."
     },
     {
       "name": "pagination",
       "type": "plugin",
       "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-pagination.git", "ref": "main" },
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/pagination"
+      },
       "summary": "Pagination for post lists."
     },
     {
       "name": "password-gate",
       "type": "plugin",
       "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-password-gate.git", "ref": "main" },
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/password-gate"
+      },
       "summary": "Password gate for the whole site."
-    },
-    {
-      "name": "admin-totp",
-      "type": "plugin",
-      "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-admin-totp.git", "ref": "main" },
-      "summary": "TOTP second factor for the admin console."
     },
     {
       "name": "publish",
       "type": "plugin",
       "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-publish.git", "ref": "main" },
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/publish"
+      },
       "summary": "Publish states and scheduled publishing."
+    },
+    {
+      "name": "rss",
+      "type": "plugin",
+      "version": "1.0.0",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/rss"
+      },
+      "summary": "RSS feed at /rss plus nav and head links."
     },
     {
       "name": "s3",
       "type": "plugin",
       "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-s3.git", "ref": "main" },
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/s3"
+      },
       "summary": "Mirror media to S3-compatible storage."
+    },
+    {
+      "name": "search",
+      "type": "plugin",
+      "version": "1.0.0",
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/search"
+      },
+      "summary": "Search page at /search."
     },
     {
       "name": "sitemap-html",
       "type": "plugin",
       "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-sitemap-html.git", "ref": "main" },
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/sitemap-html"
+      },
       "summary": "HTML sitemap page."
     },
     {
       "name": "tag-cloud",
       "type": "plugin",
       "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-plugin-tag-cloud.git", "ref": "main" },
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/tag-cloud"
+      },
       "summary": "Tag cloud widget."
     },
     {
-      "name": "clay",
-      "type": "theme",
+      "name": "translation",
+      "type": "plugin",
       "version": "1.0.0",
-      "requires": { "core": ">=1.0.0" },
-      "source": { "kind": "git", "url": "https://github.com/parkwoo/wawoo-theme-clay.git", "ref": "main" },
-      "summary": "Warm, paper-like theme (clay)."
+      "requires": {
+        "core": ">=1.0.0"
+      },
+      "source": {
+        "kind": "hosted",
+        "path": "plugins/translation"
+      },
+      "summary": "File-based translation with admin panel and ENV-based API key."
     }
   ]
 }

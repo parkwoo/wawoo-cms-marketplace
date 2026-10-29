@@ -1,0 +1,20 @@
+{
+    "name": "comments",
+    "type": "plugin",
+    "version": "1.0.0",
+    "namespace": "Wawoo\\Plugin\\Comments",
+    "entry": "Plugin",
+    "requires": { "core": ">=1.0.0" },
+    "hooks": {
+        "core.request":        "Bootstrap",
+        "theme.post.after":     ["InjectForm", "RenderList"],
+        "admin.before_render":  "AdminPanel"
+    },
+    "config": {
+        "moderation": "manual",
+        "max_length": 2000,
+        "min_length": 2,
+        "per_page": 20,
+        "rate_limit_per_hour": 5
+    }
+}

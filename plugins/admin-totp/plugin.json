@@ -1,0 +1,25 @@
+{
+    "name": "admin-totp",
+    "type": "plugin",
+    "version": "1.0.0",
+    "namespace": "Wawoo\\Plugin\\AdminTotp",
+    "entry": "Plugin",
+    "requires": { "core": ">=1.0.0" },
+    "hooks": {
+        "core.request": "Guard",
+        "admin.authed": "Setup"
+    },
+    "config": {
+        "password_hash": "",
+        "session_name": "wawoo_admin",
+        "session_ttl": 1800,
+        "issuer": "wawoo-cms",
+        "totp_period": 30,
+        "totp_digits": 6,
+        "totp_window": 1,
+        "backup_codes": 8,
+        "data_file": "admin.json",
+        "max_attempts": 5,
+        "lockout_seconds": 300
+    }
+}

@@ -11,24 +11,24 @@ folder under the site's `plugins/` (or `themes/`) directory and enabling it.
 ## What is here
 
 - `index.json` — machine-readable catalog of every listed plugin/theme.
-- `plugins/<name>/` — first-party plugins hosted in this repo.
-- `themes/<name>/` — first-party themes (none yet).
+- `plugins/<name>/` — every first-party plugin, hosted in this repo.
+- `themes/<name>/` — first-party themes (none hosted yet; see `clay` below).
 - `bundles/default.json` — a starter set of enabled plugins.
 
 The `admin` plugin ships its **own self-contained admin theme** under
 `plugins/admin/theme/` (CSS/JS inlined, no CDN, no build step). It is rendered
 independently of the site's front-end theme via the core `Theme::renderFile()`.
 
-Plugins whose source lives in their own repository are referenced from
-`index.json` with `"source": { "kind": "git", ... }` and are not copied here.
-
 ### Source of truth
 
-- `code` and `mermaid` are canonical in their own repos
-  (`wawoo-plugin-code`, `wawoo-plugin-mermaid`) and are only referenced here —
-  do not add a second in-repo copy.
-- `admin`, `rss`, `search`, and `translation` are hosted here; the in-repo
-  copy under `plugins/` is canonical.
+- All plugins are **hosted here** (`plugins/<name>/`): `admin`, `rss`, `search`,
+  `translation`, `admin-totp`, `analytics`, `code`, `comments`, `i18n`,
+  `maintenance`, `mermaid`, `mlang`, `pagination`, `password-gate`, `publish`,
+  `s3`, `sitemap-html`, `tag-cloud`. The matching `wawoo-plugin-*` repos are the
+  upstream development homes; the copy here is the install source.
+- The `clay` theme is referenced from its own repo
+  (`wawoo-theme-clay`) via `"source": { "kind": "git", ... }` — the only
+  non-hosted item.
 
 ## Install an item
 

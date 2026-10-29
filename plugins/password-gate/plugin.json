@@ -1,0 +1,32 @@
+{
+    "name": "password-gate",
+    "type": "plugin",
+    "version": "1.0.0",
+    "namespace": "Wawoo\\Plugin\\PasswordGate",
+    "entry": "Plugin",
+    "settings": true,
+    "requires": {
+        "core": ">=1.0.0"
+    },
+    "hooks": {
+        "core.boot": "Guard"
+    },
+    "config": {
+        "password_hash": "",
+        "cookie_name": "wawoo_gate",
+        "cookie_ttl": 86400,
+        "session_ttl": 7200,
+        "max_attempts": 5,
+        "lockout_seconds": 900,
+        "title": "Members only",
+        "message": "This site is private. Enter the password to continue.",
+        "placeholder": "Password",
+        "button": "Enter",
+        "footer": "Authorized access only.",
+        "remember_days": 7,
+        "exempt_paths": ["/gate.css", "/admin"],
+        "exempt_post": true,
+        "theme": "default",
+        "trust_proxy": false
+    }
+}

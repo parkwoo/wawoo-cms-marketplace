@@ -1,0 +1,29 @@
+{
+    "name": "code",
+    "type": "plugin",
+    "version": "1.3.1",
+    "namespace": "Wawoo\\Plugin\\Code",
+    "entry": "Plugin",
+    "requires": {
+        "core": ">=1.0.0"
+    },
+    "hooks": {
+        "theme.footer": "Enhance"
+    },
+    "settings": true,
+    "config": {
+        "enabled": true,
+        "copy_button": true,
+        "copy_label": "Copy",
+        "copied_label": "Copied",
+        "highlight": true,
+        "code_bg": "#ffffff",
+        "code_text": "#1f2328",
+        "code_border": "#d8d8dc",
+        "pill_bg": "#f6f8fa",
+        "pill_text": "#57606a",
+        "hljs_cdn": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/highlight.min.js",
+        "hljs_integrity": "",
+        "hljs_theme_css": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/styles/github.min.css"
+    }
+}

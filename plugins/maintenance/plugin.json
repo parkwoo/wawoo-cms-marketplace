@@ -1,0 +1,27 @@
+{
+    "name": "maintenance",
+    "type": "plugin",
+    "version": "1.0.0",
+    "namespace": "Wawoo\\Plugin\\Maintenance",
+    "entry": "Plugin",
+    "requires": {
+        "core": ">=1.0.0"
+    },
+    "hooks": {
+        "core.boot": "Guard"
+    },
+    "config": {
+        "enabled": false,
+        "cookie_name": "wawoo_maintenance",
+        "cookie_ttl": 3600,
+        "max_attempts": 5,
+        "lockout_seconds": 300,
+        "title": "Maintenance",
+        "message": "We are performing scheduled maintenance. Please check back soon.",
+        "button": "Continue",
+        "footer": "",
+        "exempt_paths": ["/admin", "/gate.css"],
+        "trust_proxy": false
+    },
+    "settings": true
+}

@@ -1,0 +1,18 @@
+{
+    "name": "publish",
+    "type": "plugin",
+    "version": "1.0.0",
+    "namespace": "Wawoo\\Plugin\\Publish",
+    "entry": "Plugin",
+    "requires": {
+        "core": ">=1.0.0"
+    },
+    "hooks": {
+        "core.request": "Due"
+    },
+    "settings": true,
+    "config": {
+        "default_status": "draft",
+        "due_minutes": 0
+    }
+}

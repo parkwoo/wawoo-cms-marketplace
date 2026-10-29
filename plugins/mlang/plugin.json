@@ -1,0 +1,19 @@
+{
+    "name": "mlang",
+    "type": "plugin",
+    "version": "1.0.0",
+    "namespace": "Wawoo\\Plugin\\Mlang",
+    "entry": "Plugin",
+    "requires": { "core": ">=1.0.0" },
+    "hooks": {
+        "core.boot":        "Boot",
+        "post.load":        "PostLoader",
+        "page.load":        "PageLoader",
+        "theme.post.after": "PostLinks",
+        "theme.page.after": "PageLinks"
+    },
+    "config": {
+        "default_lang": "en",
+        "supported": ["en", "ja", "zh"]
+    }
+}

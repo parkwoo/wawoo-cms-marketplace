@@ -1,0 +1,16 @@
+{
+    "name": "tag-cloud",
+    "type": "plugin",
+    "version": "1.0.0",
+    "namespace": "Wawoo\\Plugin\\TagCloud",
+    "entry": "Plugin",
+    "requires": { "core": ">=1.0.0" },
+    "hooks": {
+        "theme.index.after": "Render"
+    },
+    "config": {
+        "min_font_px": 12,
+        "max_font_px": 28,
+        "title": "Tags"
+    }
+}

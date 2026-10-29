@@ -1,0 +1,25 @@
+{
+    "name": "mermaid",
+    "type": "plugin",
+    "version": "1.1.2",
+    "namespace": "Wawoo\\Plugin\\Mermaid",
+    "entry": "Plugin",
+    "requires": {
+        "core": ">=1.0.0"
+    },
+    "hooks": {
+        "theme.footer": "Assets"
+    },
+    "settings": true,
+    "config": {
+        "enabled": true,
+        "cdn_url": "https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js",
+        "cdn_integrity": "",
+        "theme": "default",
+        "dark_theme": "dark",
+        "security_level": "strict",
+        "start_on_load": false,
+        "diagram_bg": "#ffffff",
+        "follow_scheme": false
+    }
+}
