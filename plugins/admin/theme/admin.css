@@ -1,171 +1,24 @@
-/* wawoo-cms admin theme — self-contained, no external deps/CDN.
-   Layout inspired by Bulma "Admin One" (fixed navbar + left aside + cards). */
+/* wawoo admin — skin on top of Admin One (Bulma). Small overrides only. */
 
-:root {
-  --wa-brand: #3b5d50;
-  --wa-brand-ink: #ffffff;
-  --wa-accent: #f0b429;
-  --wa-bg: #f4f6f8;
-  --wa-surface: #ffffff;
-  --wa-text: #1f2430;
-  --wa-muted: #6b7280;
-  --wa-border: #e4e7eb;
-  --wa-sidebar: #26332d;
-  --wa-sidebar-ink: #c8d3ce;
-  --wa-sidebar-active: #3b5d50;
-  --wa-danger: #b42318;
-  --wa-ok: #1f7a4d;
-  --wa-radius: 10px;
-  --wa-shadow: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
+.button.is-primary {
+    background-color: #3b5d50;
+    border-color: #3b5d50;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --wa-bg: #14181c;
-    --wa-surface: #1c2229;
-    --wa-text: #e6e9ee;
-    --wa-muted: #9aa3af;
-    --wa-border: #2a323b;
-    --wa-sidebar: #10151a;
-    --wa-sidebar-ink: #aab4bf;
-    --wa-shadow: 0 1px 2px rgba(0,0,0,.4);
-  }
+.button.is-primary:hover,
+.button.is-primary:focus {
+    background-color: #2f4a40;
+    border-color: #2f4a40;
 }
-
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body.wa-admin {
-  font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans JP", "Hiragino Sans", sans-serif;
-  background: var(--wa-bg);
-  color: var(--wa-text);
-  font-size: 15px;
-  line-height: 1.5;
+.menu-list a.is-active {
+    background-color: #3b5d50;
 }
-
-/* ---- login ---- */
-.wa-login {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 1.5rem;
-  background: radial-gradient(1200px 600px at 50% -10%, rgba(59,93,80,.18), transparent), var(--wa-bg);
+.wa-search {
+    max-width: 340px;
 }
-.wa-login__card {
-  width: 100%;
-  max-width: 400px;
-  background: var(--wa-surface);
-  border: 1px solid var(--wa-border);
-  border-radius: var(--wa-radius);
-  box-shadow: var(--wa-shadow);
-  padding: 1.75rem;
+.buttons.are-small form {
+    display: inline;
+    margin: 0;
 }
-.wa-login__brand { display: flex; align-items: center; gap: .6rem; margin-bottom: 1.25rem; }
-.wa-login__logo {
-  width: 34px; height: 34px; border-radius: 9px;
-  background: var(--wa-brand); color: var(--wa-brand-ink);
-  display: grid; place-items: center; font-weight: 700;
+.card-header-title {
+    font-weight: 650;
 }
-.wa-login__hint { color: var(--wa-muted); font-size: .85rem; margin: 0 0 1rem; }
-
-/* ---- shell ---- */
-.wa-sidebar {
-  position: fixed; inset: 0 auto 0 0; width: 240px;
-  background: var(--wa-sidebar); color: var(--wa-sidebar-ink);
-  display: flex; flex-direction: column; z-index: 40;
-}
-.wa-sidebar__brand {
-  display: flex; align-items: center; gap: .6rem;
-  padding: 1rem 1.1rem; font-weight: 700; color: #fff;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
-.wa-sidebar__brand .wa-login__logo { width: 28px; height: 28px; }
-.wa-sidebar__nav { padding: .75rem .6rem; display: flex; flex-direction: column; gap: .15rem; }
-.wa-sidebar__label { padding: .75rem .6rem .35rem; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: #7f8c93; }
-.wa-navlink {
-  display: flex; align-items: center; gap: .6rem;
-  padding: .6rem .75rem; border-radius: 8px;
-  color: var(--wa-sidebar-ink); text-decoration: none; font-size: .92rem;
-}
-.wa-navlink:hover { background: rgba(255,255,255,.06); color: #fff; }
-.wa-navlink.is-active { background: var(--wa-sidebar-active); color: #fff; }
-.wa-sidebar__foot { margin-top: auto; padding: .75rem; border-top: 1px solid rgba(255,255,255,.08); }
-
-.wa-main { margin-left: 240px; min-height: 100vh; display: flex; flex-direction: column; }
-.wa-navbar {
-  position: sticky; top: 0; z-index: 30;
-  display: flex; align-items: center; gap: 1rem;
-  padding: .8rem 1.4rem; background: var(--wa-surface);
-  border-bottom: 1px solid var(--wa-border);
-}
-.wa-navbar__title { font-weight: 650; font-size: 1.05rem; }
-.wa-navbar__spacer { margin-left: auto; }
-.wa-toggle { display: none; background: none; border: 0; color: var(--wa-text); font-size: 1.2rem; cursor: pointer; }
-.wa-content { padding: 1.5rem; max-width: 1100px; width: 100%; }
-
-/* ---- cards / stats ---- */
-.wa-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
-.wa-card {
-  background: var(--wa-surface); border: 1px solid var(--wa-border);
-  border-radius: var(--wa-radius); box-shadow: var(--wa-shadow); padding: 1.1rem 1.25rem;
-}
-.wa-card__label { color: var(--wa-muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
-.wa-card__value { font-size: 1.8rem; font-weight: 700; margin-top: .1rem; }
-.wa-panel { background: var(--wa-surface); border: 1px solid var(--wa-border); border-radius: var(--wa-radius); box-shadow: var(--wa-shadow); overflow: hidden; }
-.wa-panel__head { display: flex; align-items: center; gap: .75rem; padding: 1rem 1.25rem; border-bottom: 1px solid var(--wa-border); }
-.wa-panel__title { margin: 0; font-size: 1rem; font-weight: 650; }
-
-/* ---- tables ---- */
-.wa-table-wrap { overflow-x: auto; }
-table.wa-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
-.wa-table th, .wa-table td { padding: .7rem 1.25rem; text-align: left; border-bottom: 1px solid var(--wa-border); vertical-align: middle; }
-.wa-table th { color: var(--wa-muted); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; }
-.wa-table tbody tr:last-child td { border-bottom: 0; }
-.wa-table tbody tr:hover { background: rgba(59,93,80,.04); }
-.wa-table a { color: var(--wa-brand); text-decoration: none; }
-.wa-table a:hover { text-decoration: underline; }
-
-/* ---- badges / buttons ---- */
-.wa-badge { display: inline-block; padding: .15rem .55rem; border-radius: 999px; font-size: .75rem; font-weight: 600; }
-.wa-badge--on { background: rgba(31,122,77,.14); color: var(--wa-ok); }
-.wa-badge--off { background: rgba(107,114,128,.16); color: var(--wa-muted); }
-.wa-badge--draft { background: rgba(240,180,41,.18); color: #8a6d00; }
-.wa-badge--published { background: rgba(31,122,77,.14); color: var(--wa-ok); }
-
-.wa-btn {
-  display: inline-flex; align-items: center; gap: .35rem;
-  padding: .45rem .85rem; border-radius: 8px; border: 1px solid var(--wa-border);
-  background: var(--wa-surface); color: var(--wa-text); font-size: .85rem; font-weight: 600;
-  cursor: pointer; text-decoration: none;
-}
-.wa-btn:hover { border-color: var(--wa-brand); color: var(--wa-brand); }
-.wa-btn--primary { background: var(--wa-brand); border-color: var(--wa-brand); color: var(--wa-brand-ink); }
-.wa-btn--primary:hover { filter: brightness(1.06); color: var(--wa-brand-ink); }
-.wa-btn--danger { color: var(--wa-danger); border-color: transparent; background: transparent; }
-.wa-btn--danger:hover { background: rgba(180,35,24,.08); border-color: transparent; color: var(--wa-danger); }
-.wa-actions { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
-.wa-actions form { margin: 0; }
-
-.wa-field { margin-bottom: 1rem; }
-.wa-field label { display: block; font-weight: 600; font-size: .88rem; margin-bottom: .35rem; }
-.wa-input {
-  width: 100%; padding: .6rem .75rem; border-radius: 8px;
-  border: 1px solid var(--wa-border); background: var(--wa-surface); color: var(--wa-text); font-size: .95rem;
-}
-.wa-input:focus { outline: 2px solid rgba(59,93,80,.35); border-color: var(--wa-brand); }
-.wa-alert { padding: .7rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: .9rem; }
-.wa-alert--error { background: rgba(180,35,24,.1); color: var(--wa-danger); }
-.wa-muted { color: var(--wa-muted); }
-.wa-empty { padding: 1.5rem 1.25rem; color: var(--wa-muted); }
-
-/* ---- responsive ---- */
-@media (max-width: 860px) {
-  .wa-sidebar { transform: translateX(-100%); transition: transform .2s ease; }
-  body.wa-nav-open .wa-sidebar { transform: translateX(0); }
-  .wa-main { margin-left: 0; }
-  .wa-toggle { display: inline-block; }
-  .wa-content { padding: 1rem; }
-}
-
-/* client-side table filter */
-.wa-panel__head { flex-wrap: wrap; }
-.wa-search { max-width: 240px; margin-left: auto; }

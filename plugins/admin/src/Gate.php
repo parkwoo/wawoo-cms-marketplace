@@ -33,6 +33,25 @@ final class Gate
         }
         $base = rtrim((string)($root ?? dirname(__DIR__, 3)), '/');
 
+        // Serve the vendored Admin One CSS (public; needed by the login page
+        // before authentication). Two fixed files only — no traversal.
+        $assetMap = [
+            '/admin/theme/admin.css'                => __DIR__ . '/../theme/admin.css',
+            '/admin/theme/vendor/admin-one.min.css' => __DIR__ . '/../theme/vendor/admin-one.min.css',
+        ];
+        if (isset($assetMap[$path])) {
+            $file = $assetMap[$path];
+            if (!is_file($file)) {
+                http_response_code(404);
+                exit;
+            }
+            header('Content-Type: text/css; charset=utf-8');
+            header('Cache-Control: public, max-age=3600');
+            header('X-Content-Type-Options: nosniff');
+            readfile($file);
+            exit;
+        }
+
         // When the admin-totp plugin is enabled it owns authentication
         // (password + second factor). Use the runtime enabled list (the
         // cache/plugins.json override wins over the constant), and never run
