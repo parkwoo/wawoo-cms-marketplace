@@ -224,7 +224,7 @@ final class Gate
             'action'    => $action,
         ];
         Hook::fire('admin.before_render', $vars);
-        Theme::render('admin/dashboard', $vars);
+        Theme::renderFile(__DIR__ . '/../theme/dashboard.php', $vars);
         exit;
     }
 
@@ -240,39 +240,19 @@ final class Gate
 
     private function renderScheduleForm(string $slug, string $siteTitle): void
     {
-        $e = static fn($s) => htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
         $post = Posts::bySlug($slug, true);
         $title = $post['title'] ?? $slug;
-        echo '<!doctype html><meta charset="utf-8"><title>Schedule - ' . $e($siteTitle) . '</title>'
-            . '<body style="font-family:system-ui,sans-serif;max-width:420px;margin:4rem auto;background:#fff;color:#1d1d1f">'
-            . '<h1>Schedule publish</h1>'
-            . '<p>Post: <strong>' . $e($title) . '</strong> (<code>' . $e($slug) . '</code>)</p>'
-            . '<form method="post" action="/admin/">'
-            . Csrf::field()
-            . '<input type="hidden" name="action" value="schedule-submit">'
-            . '<input type="hidden" name="slug" value="' . $e($slug) . '">'
-            . '<label>Publish at<br><input type="datetime-local" name="at" required style="width:100%;padding:.5rem;margin-top:.25rem"></label>'
-            . '<p style="color:#6e6e73;font-size:.85rem">Local time. Examples: 2026-09-10T09:00, or any strtotime string.</p>'
-            . '<button style="background:#1d1d1f;color:#fff;border:0;border-radius:8px;padding:.6rem 1.1rem;margin-top:.5rem">Schedule</button>'
-            . ' <a href="/admin/" style="color:#0071e3">Cancel</a>'
-            . '</form></body>';
+        Theme::renderFile(__DIR__ . '/../theme/schedule.php', [
+            'slug'      => $slug,
+            'title'     => (string)$title,
+            'siteTitle' => $siteTitle,
+        ]);
     }
 
     private function renderLogin(string $message, int $status): void
     {
         http_response_code($status);
-        $e = static fn($s) => htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
-        $msg = $message !== '' ? '<p style="color:#b00020">' . $e($message) . '</p>' : '';
-        echo '<!doctype html><meta charset="utf-8"><title>' . $e(t('admin.login_title', 'Admin login')) . '</title>'
-            . '<body style="font-family:system-ui,sans-serif;max-width:320px;margin:4rem auto;background:#fff;color:#1d1d1f">'
-            . '<h1>' . $e(t('admin.login_title', 'Admin login')) . '</h1>'
-            . $msg
-            . '<form method="post" action="/admin/">'
-            . '<input type="password" name="pw" placeholder="' . $e(t('admin.password', 'Password')) . '" autofocus required '
-            . 'style="width:100%;padding:.6rem;font-size:1rem;box-sizing:border-box">'
-            . '<button type="submit" style="margin-top:1rem;padding:.6rem 1.2rem;background:#1d1d1f;color:#fff;border:0;border-radius:8px">'
-            . $e(t('admin.sign_in', 'Sign in')) . '</button>'
-            . '</form></body>';
+        Theme::renderFile(__DIR__ . '/../theme/login.php', ['message' => $message]);
     }
 
     private static function loginFile(): string

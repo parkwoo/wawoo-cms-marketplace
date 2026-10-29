@@ -15,6 +15,10 @@ folder under the site's `plugins/` (or `themes/`) directory and enabling it.
 - `themes/<name>/` — first-party themes (none yet).
 - `bundles/default.json` — a starter set of enabled plugins.
 
+The `admin` plugin ships its **own self-contained admin theme** under
+`plugins/admin/theme/` (CSS/JS inlined, no CDN, no build step). It is rendered
+independently of the site's front-end theme via the core `Theme::renderFile()`.
+
 Plugins whose source lives in their own repository are referenced from
 `index.json` with `"source": { "kind": "git", ... }` and are not copied here.
 
@@ -33,8 +37,8 @@ git clone https://github.com/parkwoo/wawoo-plugin-comments
 php bin/wawoo plugin:link /path/to/wawoo-plugin-comments
 ```
 
-Then add the name to `ENABLED_PLUGINS` in `config.local.php` (or use
-`/admin → Plugins`).
+Then add the name to `ENABLED_PLUGINS` in `config.local.php`, or run
+`php bin/wawoo enable <name>` / `disable <name>`, or use `/admin → Plugins`.
 
 ## Compatibility
 
