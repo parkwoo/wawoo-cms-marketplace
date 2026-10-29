@@ -23,6 +23,11 @@ final class Guard
             return;
         }
         if (session_status() === PHP_SESSION_NONE) {
+            session_set_cookie_params([
+                'httponly' => true,
+                'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+                'samesite' => 'Lax',
+            ]);
             @session_start();
         }
         $cfg = Config::all();
@@ -115,6 +120,10 @@ final class Guard
         }
 
         if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['wawoo_admin_step'] ?? '') === 'password') {
+            if (!self::csrfOk()) {
+                self::renderForm('Password', 'password', 'pw', 'Session expired. Please reload and try again.', 403);
+                exit;
+            }
             $pw   = (string)($_POST['pw'] ?? '');
             $hash = (string)$cfg['password_hash'];
             if ($pw !== '' && password_verify($pw, $hash)) {
@@ -144,11 +153,22 @@ final class Guard
         }
 
         if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['wawoo_admin_step'] ?? '') === 'totp') {
+            if (!self::csrfOk()) {
+                self::renderForm('Authenticator code (or backup code)', 'totp', 'code', 'Session expired. Please reload and try again.', 403);
+                exit;
+            }
             $code = (string)($_POST['code'] ?? '');
             $secret = Store::getSecret();
-            $validTotp = $secret !== null && Totp::verify($secret, $code, (int)$cfg['totp_window'], (int)$cfg['totp_period'], (int)$cfg['totp_digits']);
+            $counter = $secret !== null
+                ? Totp::matchingCounter($secret, $code, (int)$cfg['totp_window'], (int)$cfg['totp_period'], (int)$cfg['totp_digits'])
+                : null;
+            // Reject a replayed code: its time-step must be newer than the last accepted one.
+            $validTotp = $counter !== null && $counter > (int)(Store::load()['last_totp_counter'] ?? 0);
             $validBackup = !$validTotp && Store::consumeBackupCode($code);
             if ($validTotp || $validBackup) {
+                if ($validTotp) {
+                    Store::setLastTotpCounter($counter);
+                }
                 Store::rateClear(self::rateKey());
                 $_SESSION['wawoo_admin_totp_ok'] = true;
                 if (session_status() === PHP_SESSION_ACTIVE) {
@@ -173,6 +193,22 @@ final class Guard
         }
     }
 
+    private static function csrfToken(): string
+    {
+        if (empty($_SESSION['wawoo_admin_csrf'])) {
+            $_SESSION['wawoo_admin_csrf'] = bin2hex(random_bytes(32));
+        }
+        return (string)$_SESSION['wawoo_admin_csrf'];
+    }
+
+    private static function csrfOk(): bool
+    {
+        $t = (string)($_POST['csrf'] ?? '');
+        return $t !== ''
+            && !empty($_SESSION['wawoo_admin_csrf'])
+            && hash_equals((string)$_SESSION['wawoo_admin_csrf'], $t);
+    }
+
     private static function renderForm(string $label, string $step, string $field, ?string $err, int $status = 401): void
     {
         http_response_code($status);
@@ -193,6 +229,7 @@ final class Guard
             <p><?= htmlspecialchars($label) ?></p>
             <?php if ($err): ?><div class="err"><?= htmlspecialchars($err) ?></div><?php endif; ?>
             <input type="hidden" name="wawoo_admin_step" value="<?= htmlspecialchars($step) ?>">
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars(self::csrfToken()) ?>">
             <input type="<?= $field === 'pw' ? 'password' : 'text' ?>" name="<?= htmlspecialchars($field) ?>" required autofocus
                    autocomplete="<?= $field === 'pw' ? 'current-password' : 'one-time-code' ?>"
                    inputmode="numeric" pattern="[0-9A-Za-z\s]*">

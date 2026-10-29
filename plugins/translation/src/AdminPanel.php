@@ -552,8 +552,7 @@ class AdminPanel
     private function checkAdminPermission(): bool
     {
         // 実際の実装ではセッションやデータベースをチェック
-        return !empty($_SESSION['wawoo_admin'])
-            || !empty($_SESSION['wawoo_admin_totp_ok']);
+        return !empty($_SESSION['wawoo_admin']);
     }
 
     // 以下はダミーメソッド（実際の実装ではデータベースやファイルシステムから取得）

@@ -43,7 +43,7 @@ class Router
             @session_start();
         }
         // All /api/translation* actions require an authenticated CMS admin.
-        if (empty($_SESSION['wawoo_admin']) && empty($_SESSION['wawoo_admin_totp_ok'])) {
+        if (empty($_SESSION['wawoo_admin'])) {
             http_response_code(403);
             $this->sendJson(['success' => false, 'error' => 'forbidden']);
         }

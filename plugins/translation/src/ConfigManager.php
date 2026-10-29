@@ -138,12 +138,15 @@ class ConfigManager
         // Ensure settings directory exists
         $settingsDir = dirname($settingsFile);
         if (!is_dir($settingsDir)) {
-            mkdir($settingsDir, 0755, true);
+            @mkdir($settingsDir, 0700, true);
         }
         
-        // Save settings
+        // Save settings atomically with restrictive permissions (holds api_key).
         $content = json_encode(self::$config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-        file_put_contents($settingsFile, $content);
+        $tmp = $settingsFile . '.tmp';
+        file_put_contents($tmp, $content);
+        @chmod($tmp, 0600);
+        rename($tmp, $settingsFile);
     }
     
     /**

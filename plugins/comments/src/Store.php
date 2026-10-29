@@ -56,7 +56,7 @@ final class Store
     {
         $dir = self::dataDir();
         if (!is_dir($dir)) {
-            @mkdir($dir, 0755, true);
+            @mkdir($dir, 0700, true);
         }
         $file = self::file($slug);
         $tmp  = $file . '.tmp';
@@ -73,6 +73,7 @@ final class Store
             flock($fp, LOCK_UN);
         }
         fclose($fp);
+        @chmod($tmp, 0600);
         rename($tmp, $file);
     }
 

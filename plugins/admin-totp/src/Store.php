@@ -25,11 +25,19 @@ final class Store
     {
         $dir = dirname(Config::dataPath());
         if (!is_dir($dir)) {
-            @mkdir($dir, 0755, true);
+            @mkdir($dir, 0700, true);
         }
         $tmp = Config::dataPath() . '.tmp';
         file_put_contents($tmp, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        @chmod($tmp, 0600);
         rename($tmp, Config::dataPath());
+    }
+
+    public static function setLastTotpCounter(int $counter): void
+    {
+        $data = self::load();
+        $data['last_totp_counter'] = $counter;
+        self::save($data);
     }
 
     public static function hasSecret(): bool

@@ -39,6 +39,26 @@ final class Totp
     }
 
     /**
+     * Return the time-step counter matched by a code (allowing the skew
+     * window), or null when the code is invalid. Used to reject replays.
+     */
+    public static function matchingCounter(string $secret, string $code, int $window = 1, int $period = 30, int $digits = 6): ?int
+    {
+        $code = preg_replace('/\s+/', '', $code);
+        if ($code === '' || strlen($code) !== $digits) {
+            return null;
+        }
+        $now = time();
+        for ($i = -$window; $i <= $window; $i++) {
+            $t = $now + $i * $period;
+            if (hash_equals(self::code($secret, $t, $period, $digits), $code)) {
+                return intdiv($t, $period);
+            }
+        }
+        return null;
+    }
+
+    /**
      * Verify a code, allowing a small clock-skew window.
      */
     public static function verify(string $secret, string $code, int $window = 1, int $period = 30, int $digits = 6): bool
